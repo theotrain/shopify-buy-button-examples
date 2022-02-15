@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>HTML 5 Boilerplate</title>
-  <link rel="stylesheet" href="style.css">
+  <!-- <link rel="stylesheet" href="style.css"> -->
 </head>
 
 <body>
@@ -159,6 +159,97 @@
       }
     })();
     /*]]>*/
+  </script>
+  <script type="text/javascript">
+    window.onload = function () {
+
+      // document.querySelector('iframe').contentWindow.onload = function () {
+      //   console.log('iframe documentwindow onload')
+      // }
+
+
+      console.log('window onload')
+      var mainframe = document.querySelector('iframe')
+      injectStyle()
+      var pulldownTimer = setInterval(waitForPulldownsLoad, 200)
+
+      function waitForPulldownsLoad() {
+        let pulldowns = mainframe.contentDocument.querySelectorAll('.shopify-buy__product__variant-selectors')
+        console.log('changePulldowns length: ' + pulldowns.length)
+        if (pulldowns.length > 0) {
+          clearInterval(pulldownTimer)
+          fixPulldowns(pulldowns)
+        }
+      }
+
+      function fixPulldowns(pulldowns) {
+        //pulldowns is a nodelist of all divs that wrap
+        // console.log()
+        for (var i = 0; i < pulldowns.length; i++) {
+          console.log('looping nodes: ' + i)
+          // pulldowns[i].style.backgroundColor = "red"
+          let pulldown = pulldowns[i]
+          let selectElement = pulldown.querySelector('.shopify-buy__option-select__select')
+          let optionsArray = Array.from(selectElement.options).map(o => o.value);
+          console.log('product ' + i + ' optionsArray: ', optionsArray)
+          //now that we have all the options, remove the pulldown from DOM
+          pulldown.textContent = ''
+          // pulldown.textContent = optionsArray
+          optionsArray.forEach(option => {
+            pulldown.innerHTML += `<div class="optionBubble">${option}</div>`
+          })
+          pulldown.style.visibility = "visible"
+        }
+      }
+
+      function injectStyle() {
+        let doc = mainframe.contentDocument;
+        let optionStyle =
+          ".optionBubble {display: inline-block; padding: 2px 8px; border-radius: 4px; background-color: #eee; line-height: 150%; margin: 3px 3px;} .shopify-buy__product__variant-selectors{ visibility: hidden; text-align:center; }"
+        let productStyle =
+          ".shopify-buy__product {border: 1px solid #ddd; padding: 15px 12px 22px 12px; border-radius: 3px;}"
+        let buttonStyle = ".shopify-buy__btn { padding: 8px 24px; }"
+        doc.body.innerHTML += `<style>${optionStyle}${productStyle}${buttonStyle}</style>`;
+      }
+
+      //document.querySelector('iframe').contentDocument.querySelectorAll('.shopify-buy__product__variant-selectors')
+    }
+
+    // window.onload = checkIframeLoaded;
+
+    // function checkIframeLoaded() {
+    //   // Get a handle to the iframe element
+    //   var iframe = document.querySelector('iframe')
+    //   var iframeDoc = iframe.contentDocument || iframe.contentWindow.document
+
+    //   // Check if loading is complete
+    //   if (iframeDoc.readyState == 'complete') {
+    //     // iframe.contentWindow.alert("Hello");
+    //     // iframe.contentWindow.onload = function () {
+    //     //   console.log("I am loaded");
+    //     //   console.log("this ", this);
+    //     //   changePulldowns(iframe);
+    //     // };
+    //     // The loading is complete, call the function we want executed once the iframe is loaded
+    //     changePulldowns();
+    //     return;
+    //   }
+
+    //   // If we are here, it is not loaded. Set things up so we check   the status again in 100 milliseconds
+    //   window.setTimeout(checkIframeLoaded, 100);
+    // }
+
+    // function changePulldowns() {
+    //   console.log("change pulldowns!");
+    //   var iframe = document.querySelector('iframe')
+    //   let pullDowns = iframe.contentDocument.querySelectorAll('.shopify-buy__product__variant-selectors')
+    //   console.log('pulldowns langth: ' + pullDowns.length)
+
+    //   for (var i = 0; i < pullDowns.length; i++) {
+    //     console.log('looping nodes: ' + i)
+    //     pullDowns[i].style.visibility = "hidden"
+    //   }
+    // }
   </script>
 </body>
 

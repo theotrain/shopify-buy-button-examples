@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>HTML 5 Boilerplate</title>
-  <link rel="stylesheet" href="style.css">
+  <!-- <link rel="stylesheet" href="style.css"> -->
 </head>
 
 <body>
-  <div id='collection-component-1644557735192'></div>
+  <div id='collection-component-1644965634604'></div>
   <script type="text/javascript">
     /*<![CDATA[*/
     (function () {
@@ -35,13 +35,13 @@
 
       function ShopifyBuyInit() {
         var client = ShopifyBuy.buildClient({
-          domain: 'drawer-cart.myshopify.com',
-          storefrontAccessToken: 'c24431cb8c94db20405f19da8c5f2441',
+          domain: 'steel-straw.myshopify.com',
+          storefrontAccessToken: '0ed628417f4e2c9146051a1eac8878dc',
         });
         ShopifyBuy.UI.onReady(client).then(function (ui) {
           ui.createComponent('collection', {
-            id: '384140476675',
-            node: document.getElementById('collection-component-1644557735192'),
+            id: '267802279993',
+            node: document.getElementById('collection-component-1644965634607'),
             moneyFormat: '%24%7B%7Bamount%7D%7D',
             options: {
               "product": {
@@ -68,17 +68,17 @@
                   },
                   "button": {
                     ":hover": {
-                      "background-color": "#063f9f"
+                      "background-color": "#0333ff"
                     },
-                    "background-color": "#0746b1",
+                    "background-color": "#021ea9",
                     ":focus": {
-                      "background-color": "#063f9f"
+                      "background-color": "#0333ff"
                     }
                   }
                 },
                 "buttonDestination": "modal",
                 "contents": {
-                  "options": true
+                  "options": false
                 },
                 "text": {
                   "button": "View product"
@@ -110,11 +110,11 @@
                   },
                   "button": {
                     ":hover": {
-                      "background-color": "#063f9f"
+                      "background-color": "#0333ff"
                     },
-                    "background-color": "#0746b1",
+                    "background-color": "#021ea9",
                     ":focus": {
-                      "background-color": "#063f9f"
+                      "background-color": "#0333ff"
                     }
                   }
                 },
@@ -127,11 +127,11 @@
                 "styles": {
                   "button": {
                     ":hover": {
-                      "background-color": "#063f9f"
+                      "background-color": "#0333ff"
                     },
-                    "background-color": "#0746b1",
+                    "background-color": "#021ea9",
                     ":focus": {
-                      "background-color": "#063f9f"
+                      "background-color": "#0333ff"
                     }
                   }
                 },
@@ -143,12 +143,12 @@
               "toggle": {
                 "styles": {
                   "toggle": {
-                    "background-color": "#0746b1",
+                    "background-color": "#021ea9",
                     ":hover": {
-                      "background-color": "#063f9f"
+                      "background-color": "#0333ff"
                     },
                     ":focus": {
-                      "background-color": "#063f9f"
+                      "background-color": "#0333ff"
                     }
                   }
                 }
@@ -159,6 +159,61 @@
       }
     })();
     /*]]>*/
+  </script>
+  <script type="text/javascript">
+    window.onload = function () {
+
+      // document.querySelector('iframe').contentWindow.onload = function () {
+      //   console.log('iframe documentwindow onload')
+      // }
+
+
+      console.log('window onload')
+      var mainframe = document.querySelector('iframe')
+      injectStyle()
+      var pulldownTimer = setInterval(waitForPulldownsLoad, 200)
+
+      function waitForPulldownsLoad() {
+        let pulldowns = mainframe.contentDocument.querySelectorAll('.shopify-buy__product__variant-selectors')
+        console.log('changePulldowns length: ' + pulldowns.length)
+        if (pulldowns.length > 0) {
+          clearInterval(pulldownTimer)
+          fixPulldowns(pulldowns)
+        }
+      }
+
+      function fixPulldowns(pulldowns) {
+        //pulldowns is a nodelist of all divs that wrap
+        // console.log()
+        for (var i = 0; i < pulldowns.length; i++) {
+          console.log('looping nodes: ' + i)
+          // pulldowns[i].style.backgroundColor = "red"
+          let pulldown = pulldowns[i]
+          let selectElement = pulldown.querySelector('.shopify-buy__option-select__select')
+          let optionsArray = Array.from(selectElement.options).map(o => o.value);
+          console.log('product ' + i + ' optionsArray: ', optionsArray)
+          //now that we have all the options, remove the pulldown from DOM
+          pulldown.textContent = ''
+          // pulldown.textContent = optionsArray
+          optionsArray.forEach(option => {
+            pulldown.innerHTML += `<div class="optionBubble">${option}</div>`
+          })
+          pulldown.style.visibility = "visible"
+        }
+      }
+
+      function injectStyle() {
+        let doc = mainframe.contentDocument;
+        let optionStyle =
+          ".optionBubble {display: inline-block; padding: 2px 8px; border-radius: 4px; background-color: #eee; line-height: 150%; margin: 3px 3px;} .shopify-buy__product__variant-selectors{ visibility: hidden; text-align:center; }"
+        let productStyle =
+          ".shopify-buy__product {border: 1px solid #ddd; padding: 15px 12px 22px 12px; border-radius: 3px;}"
+        let buttonStyle = ".shopify-buy__btn { padding: 8px 24px; }"
+        doc.body.innerHTML += `<style>${optionStyle}${productStyle}${buttonStyle}</style>`;
+      }
+
+      //document.querySelector('iframe').contentDocument.querySelectorAll('.shopify-buy__product__variant-selectors')
+    }
   </script>
 </body>
 
