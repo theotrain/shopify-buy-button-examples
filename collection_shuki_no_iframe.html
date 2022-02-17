@@ -172,7 +172,7 @@
       console.log('window onload')
       var mainframe = document.querySelector('iframe')
       injectStyle()
-      var pulldownTimer = setInterval(waitForPulldownsLoad, 200)
+      // var pulldownTimer = setInterval(waitForPulldownsLoad, 200)
 
       function waitForPulldownsLoad() {
         let pulldowns = mainframe.contentDocument.querySelectorAll('.shopify-buy__product__variant-selectors')
