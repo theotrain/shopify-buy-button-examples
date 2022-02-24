@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>HTML 5 Boilerplate</title>
+  <!-- <link rel="stylesheet" href="style.css"> -->
+</head>
+
+<body>
+  <div id='collection-component-1644965634604'></div>
+  <script type="text/javascript">
+    /*<![CDATA[*/
+    (function () {
+      var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+      if (window.ShopifyBuy) {
+        if (window.ShopifyBuy.UI) {
+          ShopifyBuyInit();
+        } else {
+          loadScript();
+        }
+      } else {
+        loadScript();
+      }
+
+      function loadScript() {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = scriptURL;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+        script.onload = ShopifyBuyInit;
+      }
+
+      function renderOptions(options) {
+        let output = ''
+        // Object.keys(options)
+        // return 'option keys: ', Object.keys()
+        return 'hello'
+      }
+
+      function ShopifyBuyInit() {
+        var client = ShopifyBuy.buildClient({
+          domain: 'steel-straw.myshopify.com',
+          storefrontAccessToken: '0ed628417f4e2c9146051a1eac8878dc',
+        });
+        ShopifyBuy.UI.onReady(client).then(function (ui) {
+          ui.createComponent('collection', {
+            id: '267802279993',
+            node: document.getElementById('collection-component-1644965634607'),
+            moneyFormat: '%24%7B%7Bamount%7D%7D',
+            options: {
+              "product": {
+                "styles": {
+                  "product": {
+                    "@media (min-width: 601px)": {
+                      "max-width": "calc(25% - 20px)",
+                      "margin-left": "20px",
+                      "margin-bottom": "50px",
+                      "width": "calc(25% - 20px)"
+                    },
+                    "img": {
+                      "height": "calc(100% - 15px)",
+                      "position": "absolute",
+                      "left": "0",
+                      "right": "0",
+                      "top": "0"
+                    },
+                    "imgWrapper": {
+                      "padding-top": "calc(75% + 15px)",
+                      "position": "relative",
+                      "height": "0"
+                    }
+                  },
+                  "button": {
+                    ":hover": {
+                      "background-color": "#0333ff"
+                    },
+                    "background-color": "#021ea9",
+                    ":focus": {
+                      "background-color": "#0333ff"
+                    }
+                  }
+                },
+                "buttonDestination": "modal",
+                "contents": {
+                  "options": true
+                },
+                DOMEvents: {
+                  // 'change .shopify-buy__option-select__select': function (evt, target) {
+                  'click .optionBubble': function (evt, target) {
+
+                    var productElement = evt.target.closest('.shopify-buy__product');
+                    console.log('closest: ', productElement)
+
+                    //copy variant selectors chunk so i can paste it back
+                    var selectorsElementHTML = evt.target.closest(
+                      '.shopify-buy__product__variant-selectors').innerHTML;
+                    var optionName = target.name
+                    // console.log('closest variantSelector: ', selectorsElement)
+                    var priceHTML = productElement.querySelector('.shopify-buy__product__price').innerHTML
+
+                    //all products indexed
+                    const allProducts = [...document.querySelector('iframe').contentDocument
+                      .querySelectorAll(
+                        '.shopify-buy__collection-products .shopify-buy__product')
+                    ];
+                    console.log('all products: ', allProducts)
+
+                    // const prodIndex = allProducts.filter((prod, idx) => {
+                    //   return (prod === productElement)
+                    // })[0]
+                    let prodIndex
+                    for (let i = 0, max = allProducts.length; i < max; i++) {
+                      if (allProducts[i] === productElement) {
+                        prodIndex = i
+                        break
+                      }
+                    }
+                    console.log('prodIndex: ', prodIndex)
+
+
+                    // var optionName = target.parentElement.name
+
+                    // console.log('target: ', target)
+                    // console.log('option element parent: ', target.parentElement)
+                    console.log('optionName: ', optionName)
+
+
+                    ui.components.collection[0].products[prodIndex].updateVariant(optionName, target
+                      .innerHTML)
+
+                    // console.log('variant selector before: ', allProducts[prodIndex].querySelector(
+                    //   '.shopify-buy__product__variant-selectors'))
+                    let thisVariant = allProducts[prodIndex].querySelector(
+                      '.shopify-buy__product__variant-selectors')
+                    thisVariant.innerHTML = selectorsElementHTML
+                    thisVariant.style.visibility = "visible"
+
+                    allProducts[prodIndex].querySelector(
+                      '.shopify-buy__product__price').innerHTML = priceHTML
+                    // console.log('variant selector after: ', allProducts[prodIndex].querySelector(
+                    //   '.shopify-buy__product__variant-selectors'))
+
+                    // allProducts[prodIndex].querySelector('.shopify-buy__product__variant-selectors').innerHTML = selectorsElement.innerHTML
+
+                    // var data = target.dataset;
+                    console.log('event: ', evt)
+                    console.log('target: ', target)
+                    // console.log('target.id: ', target.id)
+                    // console.log('data: ', target.dataset)
+                    console.log('value: ', target.innerHTML)
+
+                    // console.log('ui: ', ui)
+                    // console.log('ui.components: ', ui.components)
+                    // console.log('ui.components.collection[0].model.products[0]: ', ui.components.collection[
+                    //   0].model.products[0])
+                    // console.log('product: ', ui.components.collection[
+                    //   0].products[0])
+                    // console.log('updatevariant', ui.components.collection[
+                    //   0].products[0].updateVariant('Color', "Blue"))
+
+                  }
+                },
+                "text": {
+                  "button": "View product"
+                }
+              },
+              "productSet": {
+                "styles": {
+                  "products": {
+                    "@media (min-width: 601px)": {
+                      "margin-left": "-20px"
+                    }
+                  }
+                }
+              },
+              "modalProduct": {
+                "contents": {
+                  "img": false,
+                  "imgWithCarousel": true,
+                  "button": false,
+                  "buttonWithQuantity": true
+                },
+                "styles": {
+                  "product": {
+                    "@media (min-width: 601px)": {
+                      "max-width": "100%",
+                      "margin-left": "0px",
+                      "margin-bottom": "0px"
+                    }
+                  },
+                  "button": {
+                    ":hover": {
+                      "background-color": "#0333ff"
+                    },
+                    "background-color": "#021ea9",
+                    ":focus": {
+                      "background-color": "#0333ff"
+                    }
+                  }
+                },
+                "text": {
+                  "button": "Add to cart"
+                }
+              },
+              "option": {},
+              "cart": {
+                "styles": {
+                  "button": {
+                    ":hover": {
+                      "background-color": "#0333ff"
+                    },
+                    "background-color": "#021ea9",
+                    ":focus": {
+                      "background-color": "#0333ff"
+                    }
+                  }
+                },
+                "text": {
+                  "total": "Subtotal",
+                  "button": "Checkout"
+                }
+              },
+              "toggle": {
+                "styles": {
+                  "toggle": {
+                    "background-color": "#021ea9",
+                    ":hover": {
+                      "background-color": "#0333ff"
+                    },
+                    ":focus": {
+                      "background-color": "#0333ff"
+                    }
+                  }
+                }
+              }
+            },
+          });
+        });
+      }
+    })();
+    /*]]>*/
+  </script>
+  <script type="text/javascript">
+    window.onload = function () {
+
+      // document.querySelector('iframe').contentWindow.onload = function () {
+      //   console.log('iframe documentwindow onload')
+      // }
+
+
+      console.log('window onload')
+      var mainframe = document.querySelector('iframe')
+      injectStyle()
+      var pulldownTimer = setInterval(waitForPulldownsLoad, 200)
+
+      function waitForPulldownsLoad() {
+        let pulldowns = mainframe.contentDocument.querySelectorAll('.shopify-buy__product__variant-selectors')
+        console.log('changePulldowns length: ' + pulldowns.length)
+        if (pulldowns.length > 0) {
+          clearInterval(pulldownTimer)
+          fixPulldowns(pulldowns)
+          // addLinks()
+        }
+      }
+
+      function fixPulldowns(pulldowns) {
+        //pulldowns is a nodelist of all divs that wrap
+        console.log('pulldowns: ', pulldowns)
+        for (var i = 0; i < pulldowns.length; i++) {
+          console.log('looping nodes: ' + i)
+          // pulldowns[i].style.backgroundColor = "red"
+          let pulldown = pulldowns[i]
+          let selectElement = pulldown.querySelector('.shopify-buy__option-select__select')
+          let optionsArray = Array.from(selectElement.options).map((o) => o.value);
+          console.log('product ' + i + ' optionsArray: ', optionsArray)
+          //now that we have all the options, remove the pulldown from DOM
+          pulldown.textContent = ''
+          let htmlString = ''
+          htmlString = `<div class="shopify-buy__option-select__select" name="${selectElement.name}">`
+          optionsArray.forEach(option => {
+            htmlString += `<button class="optionBubble" name="${selectElement.name}">${option}</button>`
+          })
+          htmlString += '</div>'
+          pulldown.innerHTML = htmlString
+          pulldown.style.visibility = "visible"
+        }
+      }
+
+      function addLinks() {
+        const link = '<a href="#page" class="shopify-buy__view-page">'
+        const allProducts = [...document.querySelector('iframe').contentDocument
+          .querySelectorAll(
+            '.shopify-buy__collection-products .shopify-buy__product')
+        ];
+        allProducts.forEach(product => {
+          let image = product.querySelector('.shopify-buy__product-img-wrapper')
+          let title = product.querySelector('.shopify-buy__product__title')
+          let price = product.querySelector('.shopify-buy__product__price')
+          let imageHTML = product.querySelector('.shopify-buy__product-img-wrapper').outerHTML
+          let titleHTML = product.querySelector('.shopify-buy__product__title').outerHTML
+          let priceHTML = product.querySelector('.shopify-buy__product__price').outerHTML
+          image.remove()
+          title.remove()
+          price.remove()
+          let inner = product.innerHTML
+          let linkPortion = link + imageHTML + titleHTML + priceHTML + '</a>'
+          product.innerHTML = linkPortion + inner
+        })
+      }
+
+      function injectStyle() {
+        let doc = mainframe.contentDocument;
+        let optionStyle =
+          ".optionBubble {display: inline-block; padding: 2px 8px; border-radius: 4px; background-color: #eee; line-height: 150%; margin: 3px 3px; border: none} .optionBubble:hover{ background-color:#ccc; cursor: pointer; } .shopify-buy__product__variant-selectors{ visibility: hidden; text-align:center;} .shopify-buy__option-select__select { padding-right: 10px; }"
+        let productStyle =
+          ".shopify-buy__product {border: 1px solid #ddd; padding: 15px 12px 22px 12px; border-radius: 3px;}  @media (min-width: 601px) {.shopify-buy__product {margin-bottom: 20px}}"
+        let buttonStyle = ".shopify-buy__btn { padding: 8px 24px; }"
+        // doc.body.innerHTML += `<style>${productStyle}${buttonStyle}</style>`;
+        doc.body.innerHTML += `<style>${optionStyle}${productStyle}${buttonStyle}</style>`;
+      }
+
+      //document.querySelector('iframe').contentDocument.querySelectorAll('.shopify-buy__product__variant-selectors')
+    }
+  </script>
+</body>
+
+</html>
+
+
+<!-- `{{ for value in data.classes.product.options[0].values }}
+                              <option {{ if data.classes.product.options[0].selected_value == value %}selected{% endif %}>
+                                  {{ value }}
+                              </option>
+                              {{ endfor }}` -->
+
+
+<!-- <div class="shopify-buy__product__variant-selectors" data-element="product.options"><div class="shopify-buy__option-select" data-element="option.option">
+  <label for="Option-1645395193093-0" class="shopify-buy__option-select__label visuallyhidden" data-element="option.label">Color</label>
+    <div class="shopify-buy__option-select-wrapper" data-element="option.wrapper">
+    <select id="Option-1645395193093-0" class="shopify-buy__option-select__select" name="Color" data-element="option.select">
+        <option selected="" value="Silver">Silver</option>
+        <option value="Gold">Gold</option>
+        <option value="Rainbow">Rainbow</option>
+        <option value="Blue">Blue</option>
+        <option value="Multi-Colors">Multi-Colors</option>
+        <option value="Rose Gold">Rose Gold</option>
+    </select>
+    <svg class="shopify-buy__select-icon" data-element="option.selectIcon" viewBox="0 0 24 24"><path d="M21 5.176l-9.086 9.353L3 5.176.686 7.647 12 19.382 23.314 7.647 21 5.176z"></path></svg>
+  </div>
+</div></div> -->
+
+
+<!-- <select id="Option-1645401546079-0" class="shopify-buy__option-select__select" name="Color" data-element="option.select">
+  <option selected="" value="Silver">Silver</option>
+  <option value="Gold">Gold</option>
+  <option value="Rainbow">Rainbow</option>
+  <option value="Blue">Blue</option>
+  <option value="Multi-Colors">Multi-Colors</option>
+  <option value="Rose Gold">Rose Gold</option>
+</select> -->
